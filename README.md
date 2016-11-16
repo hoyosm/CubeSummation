@@ -1,0 +1,2 @@
+# CubeSummation
+Cube summation
