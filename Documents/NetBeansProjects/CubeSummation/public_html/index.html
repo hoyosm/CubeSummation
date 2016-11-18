@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+/* 
+ * @@Author: Margarita Hoyos
+ */
 -->
 <html>
     <head>
         <title>Cube Summation</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="scripts/vendor/bootstrap/3.3.5/bootstrap.min.css">
+        <script src="scripts/vendor/jquery/jquery_1.11.3.min.js" type="text/javascript"></script>
+        <script src="scripts/vendor/bootstrap/3.3.5/bootstrap.min.js" type="text/javascript"></script>
+        <script src="scripts/vendor/angular/angular_1.4.8.min.js" type="text/javascript"></script>
+        <script src="scripts/vendor/angular/angular-route.js" type="text/javascript"></script>
+        <script type="text/javascript" src="scripts/app.js"></script>
     </head>
     <body>
-        <div>Cube Summation Test for GRABILITY</div>
+        <div ng-app="CubeSummation" >
+            <div class="input-group" ng-controller="ctrlSummation">
+                <input type="search" ng-model="result" class="form-control" placeholder="Actor's/Movie's name">
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="submit">{{validate()}}</button>
+                </span>
+            </div>
+        </div>
     </body>
 </html>
