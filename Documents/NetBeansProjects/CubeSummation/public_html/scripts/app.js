@@ -6,29 +6,23 @@ var app = angular.module("CubeSummation",[]);
 
 app.controller("ctrlSummation", function($scope)
 {
-    $scope.result = 'searching...';
-
     $scope.matrix = [];
     $scope.start = { T : 2, N : 2, M : 5 };
     $scope.initializedMatriz = false;
     $scope.messages = "";
     $scope.input = "";
-    //$scope.cases = [];
     
     $scope.init = function()
     {
         if(!$scope.initializedMatriz)
         {
-            
+            $scope.messages = "";
             var opc = $scope.input.split("\n");
-            console.log(opc);
-            if(opc.length > 0)
+            if(opc.length > 1)
             {
                 $scope.start.T = opc[0];
-                console.log("$scope.start.T " + $scope.start.T);
                 if(validate("T"))
                 {
-                    console.log("validate T ");
                     var line = 1;
                     for( var i=0; i<$scope.start.T; i++ )
                     {
@@ -36,27 +30,25 @@ app.controller("ctrlSummation", function($scope)
                         {
                             var N = opc[line].split(" ")[0];
                             var M = opc[line].split(" ")[1];
+                            $scope.start.N = N;
+                            $scope.start.M = M;
                             if( validate("M") && validate("N") )
                             {
-                                console.log("validate M N ");
-                                $scope.matrix = initMatrix(N);
-                                console.log("line " + line);
-                                for(var j = (line+1); j<=(M + line); j++ )
+                                initMatrix($scope.start.N);
+                                for(var j = (line+1); j<=(parseInt(M) + line); j++ )
                                 {
-                                    console.log("j " + j + " " + opc[j]);
                                     var params = opc[j].split(" ");
                                     if( params[0] === "UPDATE" )
                                     {
-                                        
                                         update(params[1], params[2], params[3], params[4]);
                                     }
-                                    else
+                                    else if( params[0] === "QUERY" )
                                     {
                                         query(params[1], params[2], params[3], params[4], params[5], params[6]);
                                     }
                                 }
                             }
-                            line = (line + M + 1);
+                            line = (line + parseInt(M) + 1);
                         }
                     }
                     return "validate true";
@@ -70,13 +62,14 @@ app.controller("ctrlSummation", function($scope)
         }
         else
         {
+            $scope.initializedMatriz = false;
             return "initializedMatriz";
         }
     };
     
     var initMatrix = function(n)
     {
-        var matrix = [];
+        $scope.matrix = [];
         for(var i=1; i<=n; i++)
         {
             for(var j=1; j<=n; j++)
@@ -88,13 +81,11 @@ app.controller("ctrlSummation", function($scope)
                         x: i,y: j, z: k,
                         w: 0
                     };
-                    console.log("N " + n);
-                    matrix.push(point);
+                    $scope.matrix.push(point);
                 }
             }
         }
         $scope.initializedMatriz = true;
-        return matrix;
     };
     var validate = function(type)
     {
@@ -121,12 +112,9 @@ app.controller("ctrlSummation", function($scope)
             if( point.x === parseInt(x) && point.y === parseInt(y) && point.z === parseInt(z) )
             {
                 $scope.matrix[i].w = parseInt(w);
-                console.log("$scope.matrix[i].w " + $scope.matrix[i].w);
                 break;
             }
         }
-        
-        $scope.messages += " UPDATE";
     };
     var query = function(x1, y1, z1, x2, y2, z2)
     {
@@ -139,8 +127,7 @@ app.controller("ctrlSummation", function($scope)
                 summation += point.w;
             }
         }
-        console.log("query " + summation);
-        $scope.messages += "query " + summation;
+        $scope.messages += "\n QUERY (" + x1 + "," + y1 + "," + z1 + ") (" + x2 + "," + y2 + "," + z2 + ") " + summation;
         return summation;
     };
 }); 
